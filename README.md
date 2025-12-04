@@ -75,7 +75,6 @@
 
         <div style="text-align:center;margin-top:12px">
           <div style="font-weight:700;font-size:18px">maaf yura </div>
-          <div class="small">Klik tombol untuk memperlihatkan kejutan kecil dari perdi.</div>
         </div>
       </aside>
     </main>
