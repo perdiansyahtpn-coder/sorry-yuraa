@@ -21,21 +21,18 @@
     button{cursor:pointer;border:0;padding:10px 14px;border-radius:12px;font-weight:600;background:linear-gradient(90deg,var(--accent),#ff8a80);color:white;box-shadow:0 8px 18px rgba(255,107,107,0.12);}
     button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent-2);font-weight:700}
     .hug{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px}
-    .svg-heart{width:200px;height:200px}
+
+    /* FOTO BOX */
+    .photo-box{width:100%;height:260px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:#0a1324;display:flex;align-items:center;justify-content:center}
+    .photo-box img{width:100%;height:100%;object-fit:cover}
+
     .small{font-size:13px;color:var(--muted)}
-    .hidden{display:none}
-    /* confetti canvas full cover */
     #confetti{position:absolute;left:0;top:0;pointer-events:none;width:100%;height:100%}
 
-    /* animations */
     @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
     .logo{animation:floaty 3s ease-in-out infinite}
-    .heart-beat{transform-origin:center;animation:beat 1s infinite}
-    @keyframes beat{0%{transform:scale(1)}30%{transform:scale(1.08)}60%{transform:scale(0.98)}100%{transform:scale(1)}}
 
-    /* responsive */
-    @media (max-width:880px){main{grid-template-columns:1fr;}
-      .svg-heart{width:160px;height:160px}}
+    @media (max-width:880px){main{grid-template-columns:1fr;} .photo-box{height:200px}}
   </style>
 </head>
 <body>
@@ -71,21 +68,15 @@
       </section>
 
       <aside class="card hug" aria-hidden="false">
-        <svg class="svg-heart heart-beat" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="g" x1="0" x2="1">
-              <stop offset="0" stop-color="#ff6b6b"/>
-              <stop offset="1" stop-color="#ffd166"/>
-            </linearGradient>
-          </defs>
-          <path d="M12 21s-7-4.35-9-7.5C-1.6 7.92 6 3.5 12 8.5c6-5 13.6-.58 9 5-2 3.15-9 7.5-9 7.5z" fill="url(#g)" opacity="0.95"/>
-        </svg>
+        <!-- FOTO GANTI LOVE -->
+        <div class="photo-box">
+          <img src="WhatsApp Image 2025-12-05 at 03.04.58.jpeg" alt="Foto Yura / Foto pilihan kamu" />
+        </div>
 
-        <div style="text-align:center">
+        <div style="text-align:center;margin-top:12px">
           <div style="font-weight:700;font-size:18px">maaf yura </div>
           <div class="small">Klik tombol untuk memperlihatkan kejutan kecil dari perdi.</div>
         </div>
-
       </aside>
     </main>
 
@@ -95,77 +86,18 @@
   </div>
 
   <script>
-    // Simple confetti implementation
-    const canvas = document.getElementById('confetti');
-    const ctx = canvas.getContext('2d');
-    let W, H, pieces = [];
-    function resize(){ W=canvas.width=canvas.clientWidth; H=canvas.height=canvas.clientHeight }
-    window.addEventListener('resize', resize); resize();
+    const canvas=document.getElementById('confetti');const ctx=canvas.getContext('2d');let W,H,pieces=[];function resize(){W=canvas.width=canvas.clientWidth;H=canvas.height=canvas.clientHeight}window.addEventListener('resize',resize);resize();function random(min,max){return Math.random()*(max-min)+min}function makePiece(){return{x:random(0,W),y:random(-H,0),w:random(6,12),h:random(8,18),vx:random(-0.6,0.6),vy:random(1,3),rot:random(0,360),vr:random(-6,6),color:['#ff6b6b','#ffd166','#6be7ff','#a78bfa'][Math.floor(Math.random()*4)]}}for(let i=0;i<80;i++)pieces.push(makePiece());let confettiOn=false,confettiTimer=null;function startConfetti(duration=2500){confettiOn=true;if(confettiTimer)clearTimeout(confettiTimer);confettiTimer=setTimeout(()=>confettiOn=false,duration)}function update(){ctx.clearRect(0,0,W,H);for(let p of pieces){if(!confettiOn){p.y+=p.vy*0.2}else{p.y+=p.vy}p.x+=p.vx;p.rot+=p.vr;if(p.y>H+20){Object.assign(p,makePiece(),{y:-10})}ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore()}requestAnimationFrame(update)}update();
 
-    function random(min,max){return Math.random()*(max-min)+min}
-    function makePiece(){
-      return {
-        x: random(0,W), y: random(-H,0), w: random(6,12), h: random(8,18),
-        vx: random(-0.6,0.6), vy: random(1,3), rot: random(0,360), vr: random(-6,6),
-        color: ['#ff6b6b','#ffd166','#6be7ff','#a78bfa'][Math.floor(Math.random()*4)]
-      }
-    }
-    for(let i=0;i<80;i++) pieces.push(makePiece());
+    const btnSorry=document.getElementById('btn-sorry');const btnHug=document.getElementById('btn-hug');const btnJoke=document.getElementById('btn-joke');const result=document.getElementById('result');
 
-    let confettiOn=false, confettiTimer=null;
-    function startConfetti(duration=2500){ confettiOn=true; if(confettiTimer) clearTimeout(confettiTimer); confettiTimer=setTimeout(()=>confettiOn=false,duration) }
+    btnSorry.addEventListener('click',()=>{startConfetti(3000);result.textContent='Maafmu sudah terkirim — disertai bunga dan pelukan virtual 🌸';result.style.color='var(--accent-2)'});
 
-    function update(){
-      ctx.clearRect(0,0,W,H);
-      for(let p of pieces){
-        if(!confettiOn) { p.y += p.vy*0.2; } else { p.y += p.vy; }
-        p.x += p.vx; p.rot += p.vr;
-        if(p.y>H+20) { Object.assign(p, makePiece(), {y:-10}); }
-        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
-        ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-        ctx.restore();
-      }
-      requestAnimationFrame(update);
-    }
-    update();
+    btnHug.addEventListener('click',()=>{startConfetti(1800);result.textContent='Pelukan virtual dikirim! 🤗 Semoga membuat sedikit hangat di hati.'});
 
-    // UI interactions
-    const btnSorry = document.getElementById('btn-sorry');
-    const btnHug = document.getElementById('btn-hug');
-    const btnJoke = document.getElementById('btn-joke');
-    const result = document.getElementById('result');
+    btnJoke.addEventListener('click',()=>{const jokes=['Kenapa laptop nggak pernah kedinginan? Karena ada banyak fans! 😄','Kenapa keyboard selalu sabar? Karena dia punya banyak "space" untuk berpikir! 😅','Aku minta maaf, tapi aku juga jago bikin kopi... eh maksudnya, aku jago memperbaiki suasana hati ☕️'];const j=jokes[Math.floor(Math.random()*jokes.length)];result.textContent=j;startConfetti(1200)});
 
-    btnSorry.addEventListener('click', ()=>{
-      startConfetti(3000);
-      result.textContent = 'Maafmu sudah terkirim — disertai bunga dan pelukan virtual 🌸';
-      result.style.color = 'var(--accent-2)';
-    });
+    document.querySelectorAll('button').forEach(b=>b.addEventListener('keydown',e=>{if(e.key==='Enter')b.click()}));
 
-    btnHug.addEventListener('click', ()=>{
-      // little animation: scale heart briefly
-      const heart = document.querySelector('.heart-beat');
-      heart.style.transition='transform 260ms ease';
-      heart.style.transform='scale(1.18)';
-      setTimeout(()=>heart.style.transform='scale(1)',280);
-      result.textContent = 'Pelukan virtual dikirim! 🤗 Semoga membuat sedikit hangat di hati.';
-      startConfetti(1800);
-    });
-
-    btnJoke.addEventListener('click', ()=>{
-      const jokes = [
-        'Kenapa laptop nggak pernah kedinginan? Karena ada banyak fans! 😄',
-        'Kenapa keyboard selalu sabar? Karena dia punya banyak "space" untuk berpikir! 😅',
-        'Aku minta maaf, tapi aku juga jago bikin kopi... eh maksudnya, aku jago memperbaiki suasana hati ☕️'
-      ];
-      const j = jokes[Math.floor(Math.random()*jokes.length)];
-      result.textContent = j;
-      startConfetti(1200);
-    });
-
-    // small accessibility: press Enter on buttons
-    document.querySelectorAll('button').forEach(b=>b.addEventListener('keydown', (e)=>{ if(e.key==='Enter') b.click(); }));
-
-    // optional: show a gentle automatic confetti to make page lively
     setTimeout(()=>startConfetti(1600),700);
   </script>
 </body>
